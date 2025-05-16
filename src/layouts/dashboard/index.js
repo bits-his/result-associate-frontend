@@ -50,11 +50,11 @@ function Dashboard() {
   const [ErrorMessage, setErrorMessage] = useState("");
   const [cols, setCols] = useState([]);
   const [rows, setRows] = useState([]);
-  const [FormattedRows, setFormattedRows] = useState([]);
-  const [FinalData, setFinalData] = useState([]);
+  const [formattedRows, setFormattedRows] = useState([]);
+  const [finalData, setFinalData] = useState([]);
   const [submitting, setSubmitting] = useState(false);
 
-  let [testData, setTestData] = useState([]);
+  const [testData, setTestData] = useState([]);
 
   useEffect(() => {
     fetchData({ query_type: "get_years" })
@@ -164,6 +164,7 @@ function Dashboard() {
       } else {
         let newRows = [];
         let data = [];
+        let finalData = [];
         // let basicInfo = []
         // let beginIndex = 0
         // let detailInfo = []
@@ -188,6 +189,13 @@ function Dashboard() {
               propose_quantity: row[5],
               vendor: row[6],
             });
+
+            finalData.push({
+              year: row[0],
+              country: row[1],
+              amount: row[2],
+              indicator: row[3],
+            });
           }
         });
         setTestData(data);
@@ -198,6 +206,7 @@ function Dashboard() {
           setCols(resp.cols);
           setRows(resp.rows);
           setFormattedRows(newRows);
+          setFinalData(finalData);
           // let ff = formatData(newRows);
           // setFinalData(ff);
           setErrorMessage(null);
@@ -210,6 +219,7 @@ function Dashboard() {
   };
   const postData = () => {
     setSubmitting(true);
+    console.log(finalData);
     // toast.error(ErrorMessage);
     // setCols([])
     // setRows([])
@@ -327,6 +337,8 @@ function Dashboard() {
                       <Input type="file" onChange={handleUpload} />
                     </FormGroup>
                     <Row>
+                      {/* {JSON.stringify(cols)}
+                      {JSON.stringify(rows)} */}
                       <Col md={12}>
                         <OutTable
                           data={rows}
